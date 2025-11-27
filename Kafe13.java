@@ -1,11 +1,8 @@
 import java.util.Scanner;
 
 public class Kafe13{
-    public static void Menu(String namaPelanggan, boolean isMember, String kodePromo) {
+    public static void Menu(String namaPelanggan) {
         System.out.println("Selamat datang, "+namaPelanggan + "!");
-        if (isMember) {
-            System.out.println("Anda adalah member, dapatkan diskon 10% untuk setiap pembelian!");
-        }
 
         System.out.println("==== MENU RESTO KAFE ====");
         System.out.println("1. Kopi Hitam Rp 15,000");
@@ -18,27 +15,45 @@ public class Kafe13{
         System.out.println("Silakan pilih menu yang Anda inginkan.");
     }
 
-    public static int hitungTotalHarga13(int pilihanMenu, int banyakItem) {
+    public static int hitungTotalHarga13(int pilihanMenu, int banyakItem, String kodePromo) {
         int[] hargaItems = {15000, 20000, 22000, 12000, 10000, 18000};
 
         int hargaTotal = hargaItems[pilihanMenu - 1] * banyakItem;
-        return hargaTotal;
+        int diskon = 0;
+
+        System.out.println("Harga awal (sebelum diskon): Rp" + hargaTotal);
+
+        if (kodePromo.equalsIgnoreCase("DISKON50")) {
+            diskon = hargaTotal * 50 / 100;
+            System.out.println("Kode promo DISKON50 digunakan. Diskon: Rp" + diskon);
+        } else if (kodePromo.equalsIgnoreCase("DISKON30")) {
+            diskon = hargaTotal * 30 / 100;
+            System.out.println("Kode promo DISKON30 digunakan. Diskon: Rp" + diskon);
+        } else if (!kodePromo.isEmpty()) {
+            System.out.println("Kode promo invalid. Tidak ada diskon.");
+        }
+
+        return hargaTotal - diskon;
     }
-        public static void main(String[] args) {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Masukkan nama pelanggan: ");
+        System.out.print("Masukkan nama pelanggan: ");
         String namaPelanggan = sc.nextLine();
 
-        Menu(namaPelanggan, true, "");
+        Menu(namaPelanggan);
 
         System.out.print("\nMasukkan nomor menu yang ingin Anda pesan: ");
         int pilihanMenu = sc.nextInt();
 
         System.out.print("Masukkan jumlah item yang ingin dipesan: ");
         int banyakItem = sc.nextInt();
+        sc.nextLine();
 
-        int totalBayar = hitungTotalHarga13(pilihanMenu, banyakItem);
+        System.out.print("Masukkan kode promo (jika ada): ");
+        String kodePromo = sc.nextLine();
+
+        int totalBayar = hitungTotalHarga13(pilihanMenu, banyakItem, kodePromo);
 
         System.out.println("Total harga untuk pesanan Anda: Rp" + totalBayar);
         sc.close();
